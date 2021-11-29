@@ -72,7 +72,6 @@ const Poll: NextPage = () => {
 
     ws.addEventListener('message', event => {
       let data: SocketEvent = JSON.parse(event.data)
-      console.log(data)
       if ('error' in data) {
         setError(data.error)
         console.error(data.error)

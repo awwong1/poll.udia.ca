@@ -193,6 +193,11 @@ export class Poll implements DurableObject {
     return new Response(null, { status: 101, webSocket: wsClient })
   }
 
+  async handleDeletePoll() {
+    await this.state.storage.deleteAll()
+    return new Response(null, { status: 204 })
+  }
+
   fetch = async (request: Request) =>
     handleErrors(request, () => {
       const url = new URL(request.url)
@@ -200,6 +205,8 @@ export class Poll implements DurableObject {
         return this.handleCreateNewPoll(request)
       } else if (url.pathname.startsWith('/api/socket')) {
         return this.handleEstablishPollSocket(request)
+      } else if (url.pathname.startsWith('/delete')) {
+        return this.handleDeletePoll()
       }
       return new Response('Not found', { status: 404 })
     })

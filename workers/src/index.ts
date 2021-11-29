@@ -61,7 +61,8 @@ const handlePollCreate = async (request: Request, env: Env) => {
   const pollObjectRequest = request.clone()
   const payload = await request.json<PollPayload>()
   payload.choices = payload.choices.filter(choice => !!choice)
-  const createdAt = Math.round(new Date().valueOf() / 1000)
+  const now = new Date()
+  const createdAt = Math.round(now.valueOf() / 1000)
   const metadata = { createdAt }
 
   const id = env.POLL.newUniqueId()
@@ -130,7 +131,7 @@ async function handleApiRequest(path: string[], request: Request, env: Env) {
 }
 
 const Handler: ExportedHandler<Env> = {
-  fetch: (request: Request, env: Env) =>
+  fetch: (request, env) =>
     handleErrors(request, () => {
       const url = new URL(request.url)
       const path = url.pathname.slice(1).split('/')
@@ -148,7 +149,30 @@ const Handler: ExportedHandler<Env> = {
         default:
           return new Response('Not found', { status: 404 })
       }
-    })
+    }),
+
+  scheduled: async (controller, env) => {
+    // delete all polls that are over 24 hours old
+    let cleanupCompleted: boolean = false
+    let cursor: string | undefined
+    const now = new Date()
+    while (!cleanupCompleted) {
+      const polls = await env.POLL_META.list<{ createdAt: number }>({ cursor })
+      await Promise.all(polls.keys.map(async (key) => {
+        if (key.metadata?.createdAt && key.metadata.createdAt + ONE_DAY_IN_SECONDS > (now.valueOf() / 1000)) {
+          // do nothing, poll is not 1 day old yet
+          return
+        }
+        // remove the poll and the associated data within the durable object
+        const id = env.POLL.idFromString(key.name)
+        const doStub = env.POLL.get(id)
+        await doStub.fetch('/delete')
+        await env.POLL_META.delete(key.name)
+      }))
+      cleanupCompleted = polls.list_complete
+      cursor = polls.cursor
+    }
+  }
 }
 
 export default Handler
