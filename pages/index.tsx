@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   const [loading, setLoading] = useState(false)
   const [question, setQuestion] = useState<string>('')
   const [choices, setChoices] = useState<string[]>(['', ''])
-  const [dedup, setDedup] = useState('ip')
+  const [dedup, setDedup] = useState('none')
   const [multiOk, setMultiOk] = useState(false)
   const toast = useToast()
   const router = useRouter()
@@ -33,7 +33,7 @@ const Home: NextPage = () => {
       }
       // redirect to the poll
       const pollId = await response.text()
-      router.push(`/${pollId}`)
+      router.push(`/poll?id=${pollId}`)
     } catch (error) {
       // no-op
       if (!toast.isActive('poll-create')) {
@@ -94,10 +94,10 @@ const Home: NextPage = () => {
 
           <FormControl pt='1em' isReadOnly={loading} isDisabled={loading}>
             <FormLabel>Participant Duplication Check</FormLabel>
-            <RadioGroup onChange={setDedup} value={dedup} defaultValue='ip'>
+            <RadioGroup onChange={setDedup} value={dedup} defaultValue='none'>
               <Stack>
-                <Radio value='ip'>IP Duplication Checking</Radio>
                 <Radio value='none'>No Duplication Checking</Radio>
+                <Radio value='ip'>IP Duplication Checking</Radio>
               </Stack>
             </RadioGroup>
             <FormHelperText>

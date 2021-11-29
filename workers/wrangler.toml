@@ -6,9 +6,8 @@ account_id = ""
 workers_dev = true
 route = ""
 zone_id = ""
-
 kv_namespaces = [
-  { binding = 'POLL_META', id = 'b1f6e5fefdfd42d9b1558aa1fb6c4e64' }
+  { binding = 'POLL_META', id = 'b4d525b058a040a2abd855ffc7de0eb8' }
 ]
 
 [build]
@@ -34,6 +33,33 @@ CLIENT_ORIGIN = "http://127.0.0.1:3000"
 # Override values for `--env production` usage
 [env.production]
 name = "poll-udia-ca"
+compatibility_date = "2021-11-20"
+# type = "javascript" is required to use the `[build]` section
+type = "javascript"
+account_id = ""
+workers_dev = true
+route = ""
+zone_id = ""
+kv_namespaces = [
+  { binding = 'POLL_META', id = 'b1f6e5fefdfd42d9b1558aa1fb6c4e64' }
+]
+
+[env.production.build]
+# command = "yarn && yarn test && yarn build"
+command = "yarn && yarn build"
+[env.production.build.upload]
+# The "modules" upload format is required for all projects that export a Durable Objects class
+format = "modules"
+main = "./index.mjs"
+
+[env.production.durable_objects]
+bindings = [
+  { name = "POLL", class_name = "Poll" },
+]
+
+[[env.production.migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["Poll"]
 
 [env.production.vars]
 CLIENT_ORIGIN = "https://poll.udia.ca"

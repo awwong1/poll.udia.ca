@@ -90,7 +90,7 @@ const handleSocket = (request: Request) => {
   ws.accept()
 
   const handleMessage: EventListener<MessageEvent> = (event) => {
-    ws.send(event.data)
+    ws.send(JSON.stringify({ error: 'Poll not found' }))
   }
 
   const handleCloseOrError: EventListener<Event | CloseEvent> = (event) => {
