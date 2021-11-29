@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "name": "@poll.udia.ca/workers",
+  "version": "1.0.0",
+  "description": "Workers for poll.udia.ca",
+  "module": "./dist/index.mjs",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "jest",
+    "format": "prettier --write '**/*.{js,css,json,md}'",
+    "pub": "wrangler publish",
+    "pub:production": "wrangler publish --env production",
+    "dev": "miniflare --watch"
+  },
+  "author": "Alexander Wong <alex@udia.ca>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^3.0",
+    "@cloudflare/wrangler": "^1.19.5",
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.1.0",
+    "@rollup/plugin-typescript": "^8.2.1",
+    "@types/is-odd": "^3.0.0",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^16.11.10",
+    "esbuild": "^0.13.4",
+    "esbuild-jest": "^0.5.0",
+    "isomorphic-fetch": "^3.0.0",
+    "jest": "^26.6.3",
+    "miniflare": "^1.4.1",
+    "prettier": "^1.19.1",
+    "rollup": "^2.58.0",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-esbuild": "^4.5.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-jest": "^26.5.6",
+    "tslib": "^2.2.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {}
+}
