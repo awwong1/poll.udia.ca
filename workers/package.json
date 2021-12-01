@@ -10,7 +10,7 @@
     "format": "prettier --write '**/*.{js,css,json,md}'",
     "pub": "wrangler publish",
     "pub:production": "wrangler publish --env production",
-    "dev": "miniflare --watch"
+    "dev": "miniflare --cron '* * * * *' --watch"
   },
   "author": "Alexander Wong <alex@udia.ca>",
   "license": "Apache-2.0",

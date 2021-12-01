@@ -10,6 +10,9 @@ kv_namespaces = [
   { binding = 'POLL_META', id = 'b4d525b058a040a2abd855ffc7de0eb8' }
 ]
 
+[triggers]
+crons = ["0 * * * *"]
+
 [build]
 # command = "yarn && yarn test && yarn build"
 command = "yarn && yarn build"
@@ -43,6 +46,9 @@ zone_id = ""
 kv_namespaces = [
   { binding = 'POLL_META', id = 'b1f6e5fefdfd42d9b1558aa1fb6c4e64' }
 ]
+
+[env.production.triggers]
+crons = ["0 * * * *"]
 
 [env.production.build]
 # command = "yarn && yarn test && yarn build"

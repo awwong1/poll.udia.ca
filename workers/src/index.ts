@@ -166,7 +166,7 @@ const Handler: ExportedHandler<Env> = {
         // remove the poll and the associated data within the durable object
         const id = env.POLL.idFromString(key.name)
         const doStub = env.POLL.get(id)
-        await doStub.fetch('/delete')
+        await doStub.fetch(env.CLIENT_ORIGIN + '/delete')
         await env.POLL_META.delete(key.name)
       }))
       cleanupCompleted = polls.list_complete
